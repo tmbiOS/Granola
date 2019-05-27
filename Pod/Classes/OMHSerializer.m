@@ -21,6 +21,7 @@
 
 @interface OMHSerializer()
 @property (nonatomic, retain) HKSample* sample;
+@property (nonatomic, retain) NSString* uuid;
 + (BOOL)canSerialize:(HKSample*)sample error:(NSError**)error;
 + (NSException*)unimplementedException;
 @end
@@ -69,6 +70,17 @@
         return nil;
     }
     return self;
+}
+
+- (id)initWithSample:(HKSample*)sample device: (NSString*) uuid {
+  self = [super init];
+  if (self) {
+    _sample = sample;
+    _uuid = uuid;
+  } else {
+    return nil;
+  }
+  return self;
 }
 
 /**
@@ -242,6 +254,8 @@
     
     return @{
              @"header": @{
+                     @"device_id": self.uuid,
+                     @"date": [self.sample.startDate dateString],
                      @"id": self.sample.UUID.UUIDString,
                      @"creation_date_time": [self.sample.startDate RFC3339String],
                      @"schema_id": @{
