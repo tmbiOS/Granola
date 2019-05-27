@@ -242,7 +242,7 @@
     NSMutableDictionary *serializedBodyDictionaryWithMetadata = [NSMutableDictionary dictionaryWithDictionary:serializedBodyDictionaryWithoutMetadata];
     [serializedBodyDictionaryWithMetadata addEntriesFromDictionary:[OMHSerializer serializeMetadataArray:self.sample.metadata]];
 
-    NSMutableDictionary* header = @{
+    NSMutableDictionary* header = [@{
              @"date": [self.sample.startDate dateString],
              @"id": self.sample.UUID.UUIDString,
              @"creation_date_time": [self.sample.startDate RFC3339String],
@@ -251,7 +251,7 @@
                  @"name": [self schemaName],
                  @"version": [self schemaVersion]
                  },
-             };
+             } mutableCopy];
 
     if (self.uuid) {
         header[@"device_id"] = self.uuid;
