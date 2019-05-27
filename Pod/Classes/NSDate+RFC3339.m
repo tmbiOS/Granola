@@ -38,7 +38,7 @@
 
   NSLocale* locale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
 
-  formatter.timeZone = timeZone;
+  formatter.timeZone = [NSTimeZone defaultTimeZone];
   formatter.locale = locale;
   formatter.dateFormat = @"yyyy-MM-dd";
 

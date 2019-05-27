@@ -72,17 +72,6 @@
     return self;
 }
 
-- (id)initWithSample:(HKSample*)sample device: (NSString*) uuid {
-  self = [super init];
-  if (self) {
-    _sample = sample;
-    _uuid = uuid;
-  } else {
-    return nil;
-  }
-  return self;
-}
-
 /**
  Serializes HealthKit samples into Open mHealth compliant JSON data points.
  @param sample the HealthKit sample to be serialized
@@ -126,6 +115,7 @@
     }
     // instantiate a serializer
     OMHSerializer* serializer = [[serializerClass alloc] initWithSample:sample];
+    serializer.uuid = self.uuid;
     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:[serializer data]
                                     options:NSJSONWritingPrettyPrinted
                                       error:error];
@@ -181,6 +171,7 @@
     }
     // instantiate a serializer
     OMHSerializer* serializer = [[serializerClass alloc] initWithSample:sample];
+    serializer.uuid = self.uuid;
     return [serializer data];
 }
 
@@ -251,19 +242,24 @@
     NSDictionary *serializedBodyDictionaryWithoutMetadata = [self bodyData];
     NSMutableDictionary *serializedBodyDictionaryWithMetadata = [NSMutableDictionary dictionaryWithDictionary:serializedBodyDictionaryWithoutMetadata];
     [serializedBodyDictionaryWithMetadata addEntriesFromDictionary:[OMHSerializer serializeMetadataArray:self.sample.metadata]];
+
+    NSMutableDictionary* header = @{
+             @"date": [self.sample.startDate dateString],
+             @"id": self.sample.UUID.UUIDString,
+             @"creation_date_time": [self.sample.startDate RFC3339String],
+             @"schema_id": @{
+                 @"namespace": [self schemaNamespace],
+                 @"name": [self schemaName],
+                 @"version": [self schemaVersion]
+                 },
+             };
+
+    if (self.uuid) {
+        header[@"device_id"] = self.uuid;
+    }
     
     return @{
-             @"header": @{
-                     @"device_id": self.uuid,
-                     @"date": [self.sample.startDate dateString],
-                     @"id": self.sample.UUID.UUIDString,
-                     @"creation_date_time": [self.sample.startDate RFC3339String],
-                     @"schema_id": @{
-                             @"namespace": [self schemaNamespace],
-                             @"name": [self schemaName],
-                             @"version": [self schemaVersion]
-                             },
-                     },
+             @"header": header,
              @"body":serializedBodyDictionaryWithMetadata
              };
     

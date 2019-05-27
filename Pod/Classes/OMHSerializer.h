@@ -45,6 +45,7 @@
  */
 - (NSString*)jsonForSample:(HKSample*)sample error:(NSError**)error;
 
+
 /**
  Serializes HealthKit samples into Open mHealth compliant json data points.
  @param sample the HealthKit sample to be serialized
