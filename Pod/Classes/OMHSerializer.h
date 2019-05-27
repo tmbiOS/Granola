@@ -23,6 +23,8 @@
  */
 @interface OMHSerializer : NSObject
 
+@property (nonatomic, retain) NSString* uuid;
+
 /**
  Returns a list of the HealthKit type identifiers that can be serialized to Open mHealth curated schemas. These are schemas that are not specific to Granola and are consistent with data points generated across the Open mHealth ecosystem.
  

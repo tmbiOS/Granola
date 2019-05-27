@@ -21,7 +21,6 @@
 
 @interface OMHSerializer()
 @property (nonatomic, retain) HKSample* sample;
-@property (nonatomic, retain) NSString* uuid;
 + (BOOL)canSerialize:(HKSample*)sample error:(NSError**)error;
 + (NSException*)unimplementedException;
 @end
