@@ -243,7 +243,7 @@
     [serializedBodyDictionaryWithMetadata addEntriesFromDictionary:[OMHSerializer serializeMetadataArray:self.sample.metadata]];
 
     NSMutableDictionary* header = [@{
-             @"timestamp": @([self.sample.startDate timeIntervalSince1970] * 1000),
+             @"timestamp": @(round([self.sample.startDate timeIntervalSince1970] * 1000)),
              @"date": [self.sample.startDate dateString],
              @"id": self.sample.UUID.UUIDString,
              @"creation_date_time": [self.sample.startDate RFC3339String],
