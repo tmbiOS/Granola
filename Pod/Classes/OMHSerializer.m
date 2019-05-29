@@ -71,6 +71,17 @@
     return self;
 }
 
+- (id)initWithUUID:(NSString*)uuid userId:(NSString*)userId {
+  self = [super init];
+  if (self) {
+    _uuid = uuid;
+    _userId = userId;
+  } else {
+    return nil;
+  }
+  return self;
+}
+
 /**
  Serializes HealthKit samples into Open mHealth compliant JSON data points.
  @param sample the HealthKit sample to be serialized
@@ -115,6 +126,7 @@
     // instantiate a serializer
     OMHSerializer* serializer = [[serializerClass alloc] initWithSample:sample];
     serializer.uuid = self.uuid;
+    serializer.userId = self.userId;
     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:[serializer data]
                                     options:NSJSONWritingPrettyPrinted
                                       error:error];
@@ -243,8 +255,8 @@
     [serializedBodyDictionaryWithMetadata addEntriesFromDictionary:[OMHSerializer serializeMetadataArray:self.sample.metadata]];
 
     NSMutableDictionary* header = [@{
-             @"timestamp": @(round([self.sample.startDate timeIntervalSince1970] * 1000)),
-             @"date": [self.sample.startDate dateString],
+             @"createdAt": @(round([self.sample.startDate timeIntervalSince1970] * 1000)),
+             @"mDate": [self.sample.startDate dateString],
              @"id": self.sample.UUID.UUIDString,
              @"creation_date_time": [self.sample.startDate RFC3339String],
              @"schema_id": @{
@@ -256,6 +268,9 @@
 
     if (self.uuid) {
         header[@"device_id"] = self.uuid;
+    }
+    if (self.userId) {
+        header[@"user_id"] = self.userId;
     }
     
     return @{
