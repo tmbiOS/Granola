@@ -250,10 +250,12 @@
 #pragma mark - Private
 
 - (id)data {
+    HKQuantitySample *quantitySample = (HKQuantitySample*)self.sample;
     NSDictionary *serializedBodyDictionaryWithoutMetadata = [self bodyData];
     NSMutableDictionary *serializedBodyDictionaryWithMetadata = [NSMutableDictionary dictionaryWithDictionary:serializedBodyDictionaryWithoutMetadata];
     [serializedBodyDictionaryWithMetadata addEntriesFromDictionary:[OMHSerializer serializeMetadataArray:self.sample.metadata]];
-
+    serializedBodyDictionaryWithMetadata[@"quantity_type"] = [quantitySample quantityType].description;
+  
     NSMutableDictionary* header = [@{
              @"createdAt": @(round([self.sample.startDate timeIntervalSince1970] * 1000)),
              @"mDate": [self.sample.startDate dateString],
