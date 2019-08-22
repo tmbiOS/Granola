@@ -76,7 +76,7 @@
         activityId:(NSString*)activityId
             taskId:(NSString*)taskId
             stepId:(NSString*)stepId
-occurrenceIndexOfDay:(NSUInteger)occurrenceIndexOfDay {
+occurrenceIndexOfDay:(NSNumber*)occurrenceIndexOfDay {
   self = [super init];
   if (self) {
     _uuid = uuid;
@@ -303,7 +303,7 @@ occurrenceIndexOfDay:(NSUInteger)occurrenceIndexOfDay {
     }
 
     if (self.occurrenceIndexOfDay) {
-        header[@"occurrenceIndexOfDay"] = @(self.occurrenceIndexOfDay);
+        header[@"occurrenceIndexOfDay"] = self.occurrenceIndexOfDay;
     }
 
     return @{
