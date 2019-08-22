@@ -28,7 +28,7 @@
 @property (nonatomic, retain) NSString* activityId;
 @property (nonatomic, retain) NSString* taskId;
 @property (nonatomic, retain) NSString* stepId;
-@property (nonatomic) NSUInteger occurrenceIndexOfDay;
+@property (nonatomic, assign) NSUInteger occurrenceIndexOfDay;
 
 - (id)initWithUUID:(NSString*)uuid
             userId:(NSString*)userId
