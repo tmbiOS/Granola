@@ -75,7 +75,8 @@
             userId:(NSString*)userId
         activityId:(NSString*)activityId
             taskId:(NSString*)taskId
-            stepId:(NSString*)stepId {
+            stepId:(NSString*)stepId
+occurrenceIndexOfDay:(NSUInteger)occurrenceIndexOfDay {
   self = [super init];
   if (self) {
     _uuid = uuid;
@@ -83,6 +84,7 @@
     _activityId = activityId;
     _taskId = taskId;
     _stepId = stepId;
+    _occurrenceIndexOfDay = occurrenceIndexOfDay;
   } else {
     return nil;
   }
@@ -137,6 +139,7 @@
     serializer.activityId = self.activityId;
     serializer.taskId = self.taskId;
     serializer.stepId = self.stepId;
+    serializer.occurrenceIndexOfDay = self.occurrenceIndexOfDay;
     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:[serializer data]
                                     options:NSJSONWritingPrettyPrinted
                                       error:error];
@@ -298,7 +301,11 @@
     if (self.stepId) {
         header[@"step_id"] = self.stepId;
     }
-    
+
+    if (self.occurrenceIndexOfDay) {
+        header[@"occurrenceIndexOfDay"] = @(self.occurrenceIndexOfDay);
+    }
+
     return @{
              @"header": header,
              @"body":serializedBodyDictionaryWithMetadata
