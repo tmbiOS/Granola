@@ -25,8 +25,15 @@
 
 @property (nonatomic, retain) NSString* uuid;
 @property (nonatomic, retain) NSString* userId;
+@property (nonatomic, retain) NSString* activityId;
+@property (nonatomic, retain) NSString* taskId;
+@property (nonatomic, retain) NSString* stepId;
 
-- (id)initWithUUID:(NSString*)uuid userId:(NSString*)userId;
+- (id)initWithUUID:(NSString*)uuid
+            userId:(NSString*)userId
+        activityId:(NSString*)activityId
+            taskId:(NSString*)taskId
+            stepId:(NSString*)stepId;
 
 /**
  Returns a list of the HealthKit type identifiers that can be serialized to Open mHealth curated schemas. These are schemas that are not specific to Granola and are consistent with data points generated across the Open mHealth ecosystem.

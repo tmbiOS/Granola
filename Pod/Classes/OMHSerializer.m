@@ -71,11 +71,18 @@
     return self;
 }
 
-- (id)initWithUUID:(NSString*)uuid userId:(NSString*)userId {
+- (id)initWithUUID:(NSString*)uuid
+            userId:(NSString*)userId
+        activityId:(NSString*)activityId
+            taskId:(NSString*)taskId
+            stepId:(NSString*)stepId {
   self = [super init];
   if (self) {
     _uuid = uuid;
     _userId = userId;
+    _activityId = activityId;
+    _taskId = taskId;
+    _stepId = stepId;
   } else {
     return nil;
   }
@@ -127,6 +134,9 @@
     OMHSerializer* serializer = [[serializerClass alloc] initWithSample:sample];
     serializer.uuid = self.uuid;
     serializer.userId = self.userId;
+    serializer.activityId = self.activityId;
+    serializer.taskId = self.taskId;
+    serializer.stepId = self.stepId;
     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:[serializer data]
                                     options:NSJSONWritingPrettyPrinted
                                       error:error];
@@ -275,6 +285,18 @@
     }
     if (self.userId) {
         header[@"user_id"] = self.userId;
+    }
+
+    if (self.activityId) {
+        header[@"activity_id"] = self.activityId;
+    }
+
+    if (self.taskId) {
+        header[@"task_id"] = self.taskId;
+    }
+
+    if (self.stepId) {
+        header[@"step_id"] = self.stepId;
     }
     
     return @{
