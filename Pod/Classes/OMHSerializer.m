@@ -76,7 +76,7 @@
         activityId:(NSString*)activityId
             taskId:(NSString*)taskId
             stepId:(NSString*)stepId
-occurrenceIndexOfDay:(NSNumber*)occurrenceIndexOfDay {
+occurrenceIndexOfDay:(NSString*)occurrenceIndexOfDay {
   self = [super init];
   if (self) {
     _uuid = uuid;
