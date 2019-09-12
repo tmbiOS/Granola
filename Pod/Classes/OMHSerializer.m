@@ -405,7 +405,7 @@ occurrenceIndexOfDay:(NSString*)occurrenceIndexOfDay {
     return YES;
 }
 - (id)bodyData {
-    NSString* unitString = @"lb";
+    NSString* unitString = @"kg";
     HKUnit* unit = [HKUnit unitFromString:unitString];
     double value = [[(HKQuantitySample*)self.sample quantity] doubleValueForUnit:unit];
     
