@@ -283,6 +283,15 @@ occurrenceIndexOfDay:(NSString*)occurrenceIndexOfDay {
                  },
              } mutableCopy];
 
+
+    if (self.sample.source.name) {
+      header[@"source"] = self.sample.source.name;
+    }
+
+    if (self.sample.device.name) {
+      header[@"device"] = self.sample.device.name;
+    }
+
     if (self.uuid) {
         header[@"device_id"] = self.uuid;
     }
