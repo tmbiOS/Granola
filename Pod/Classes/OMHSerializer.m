@@ -269,8 +269,10 @@ occurrenceIndexOfDay:(NSString*)occurrenceIndexOfDay {
     if([self.sample isKindOfClass:[HKQuantitySample class]]) {
       HKQuantitySample *quantitySample = (HKQuantitySample*)self.sample;
       serializedBodyDictionaryWithMetadata[@"quantity_type"] = [quantitySample quantityType].description;
+    } else {
+      serializedBodyDictionaryWithMetadata[@"quantity_type"] = [self.sample sampleType].description;
     }
-  
+
     NSMutableDictionary* header = [@{
              @"createdAt": @(round([self.sample.startDate timeIntervalSince1970] * 1000)),
              @"mDate": [self.sample.startDate dateString],
