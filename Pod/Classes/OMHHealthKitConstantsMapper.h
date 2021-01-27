@@ -130,5 +130,7 @@
  */
 + (NSDictionary*) allSupportedQuantityTypeIdentifiersToClass;
 
++ (NSDictionary*)allSupportedDataTypeIdentifiersToClass;
+
 @end
 

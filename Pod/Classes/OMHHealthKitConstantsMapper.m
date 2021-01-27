@@ -252,6 +252,7 @@
     [allTypeIdsToClasses addEntriesFromDictionary:[self allSupportedCategoryTypeIdentifiersToClasses]];
     [allTypeIdsToClasses addEntriesFromDictionary:[self allSupportedCorrelationTypeIdentifiersToClass]];
     [allTypeIdsToClasses addEntriesFromDictionary:[self allSupportedQuantityTypeIdentifiersToClass]];
+    [allTypeIdsToClasses addEntriesFromDictionary:[self allSupportedDataTypeIdentifiersToClass]];
     
     return allTypeIdsToClasses;
         
@@ -359,10 +360,23 @@
                                         HKQuantityTypeIdentifierPeripheralPerfusionIndex: @"OMHSerializerGenericQuantitySample",
                                         HKQuantityTypeIdentifierRespiratoryRate: @"OMHSerializerRespiratoryRate",
                                         HKQuantityTypeIdentifierStepCount : @"OMHSerializerStepCount",
-                                        HKQuantityTypeIdentifierUVExposure: @"OMHSerializerGenericQuantitySample"
+                                        HKQuantityTypeIdentifierUVExposure: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierHeartRateVariabilitySDNN:
+                                            @"OMHSerializerHeartRateVariabilitySDNN"
                                         };
     }
     return allQuantityTypeIdsToClasses;
+}
+
++ (NSDictionary*)allSupportedDataTypeIdentifiersToClass {
+    
+    static NSDictionary* allCorrelationTypeIdsToClasses = nil;
+    if (allCorrelationTypeIdsToClasses == nil) {
+        allCorrelationTypeIdsToClasses = @{
+                                           @"HKDataTypeIdentifierElectrocardiogram": @"OMHSerializerHeartElectrocardiogram"
+                                        };
+    }
+    return allCorrelationTypeIdsToClasses;
 }
 
 @end
