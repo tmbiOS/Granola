@@ -31,6 +31,20 @@
     return formatter;
 }
 
+
+- (NSString *)dateString {
+
+  NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+
+  NSLocale* locale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
+
+  formatter.timeZone = [NSTimeZone defaultTimeZone];
+  formatter.locale = locale;
+  formatter.dateFormat = @"yyyy-MM-dd";
+
+  return [formatter stringFromDate:self];
+}
+
 - (NSString *)RFC3339String {
     return [[[self class] RFC3339Formatter:[NSTimeZone defaultTimeZone]] stringFromDate:self];
 }

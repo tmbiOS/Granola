@@ -23,6 +23,20 @@
  */
 @interface OMHSerializer : NSObject
 
+@property (nonatomic, retain) NSString* uuid;
+@property (nonatomic, retain) NSString* userId;
+@property (nonatomic, retain) NSString* activityId;
+@property (nonatomic, retain) NSString* taskId;
+@property (nonatomic, retain) NSString* stepId;
+@property (nonatomic, retain) NSString *occurrenceIndexOfDay;
+
+- (id)initWithUUID:(NSString*)uuid
+            userId:(NSString*)userId
+        activityId:(NSString*)activityId
+            taskId:(NSString*)taskId
+            stepId:(NSString*)stepId
+            occurrenceIndexOfDay:(NSString*)occurrenceIndexOfDay;
+
 /**
  Returns a list of the HealthKit type identifiers that can be serialized to Open mHealth curated schemas. These are schemas that are not specific to Granola and are consistent with data points generated across the Open mHealth ecosystem.
  
@@ -44,6 +58,15 @@
  @return A formatted JSON string containing the sample's data in a format that adheres to the appropriate Open mHealth schema.
  */
 - (NSString*)jsonForSample:(HKSample*)sample error:(NSError**)error;
+
+
+/**
+ Serializes HealthKit samples into Open mHealth compliant json data points.
+ @param sample the HealthKit sample to be serialized
+ @param error an NSError that is passed by reference and can be checked to identify specific errors
+ @return an NSDictionary object containing the sample's data in a format that adheres to the appropriate Open mHealth schema.
+ */
+- (NSDictionary<NSString*,NSObject*>*)dictForSample:(HKSample*)sample error:(NSError**)error;
 
 @end
 
