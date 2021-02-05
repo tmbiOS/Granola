@@ -1251,38 +1251,43 @@ This serializer maps data from HKDataTypeIdentifierElectrocardiogram samples to 
 }
 
 - (id)bodyData {
- NSMutableArray* values = [NSMutableArray array];
- dispatch_group_t group = dispatch_group_create();
- 
- dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-   HKElectrocardiogramQuery* query = [[HKElectrocardiogramQuery alloc] initWithElectrocardiogram:self.sample dataHandler:^(HKElectrocardiogramQuery * _Nonnull query, HKElectrocardiogramVoltageMeasurement * _Nullable voltageMeasurement, BOOL done, NSError * _Nullable error) {
-     double value = [[voltageMeasurement quantityForLead:HKElectrocardiogramLeadAppleWatchSimilarToLeadI] doubleValueForUnit:[HKUnit voltUnit]];
-     double time = [voltageMeasurement timeSinceSampleStart];
-     [values addObject:[NSArray arrayWithObjects:[NSNumber numberWithDouble: time], [NSNumber numberWithDouble: value], nil]];
-     if (done == YES || error != nil) {
-       dispatch_group_leave(group);
-     }
-   }];
-   [[OMHSerializer healthStore] executeQuery: query];
- });
- 
- dispatch_group_enter(group);
- dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
- 
- return @{
-   @"values": values,
-   @"effective_time_frame":[self populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
- };
+  NSMutableArray* voltages = [NSMutableArray array];
+  NSDateComponents* dateComponents = [NSCalendar.currentCalendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond fromDate:[NSDate date]];
+  NSArray* date = @[[NSNumber numberWithInt: dateComponents.year], [NSNumber numberWithInt: dateComponents.month], [NSNumber numberWithInt: dateComponents.day]];
+  NSArray* time = @[[NSNumber numberWithInt: dateComponents.hour], [NSNumber numberWithInt: dateComponents.minute], [NSNumber numberWithInt: dateComponents.second]];
+  NSNumber* rate = @[[NSNumber numberWithDouble:[[((HKElectrocardiogram *)self.sample) samplingFrequency] doubleValueForUnit:[HKUnit hertzUnit]]]];
+  
+  dispatch_group_t group = dispatch_group_create();
+  
+  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+    HKElectrocardiogramQuery* query = [[HKElectrocardiogramQuery alloc] initWithElectrocardiogram:self.sample dataHandler:^(HKElectrocardiogramQuery * _Nonnull query, HKElectrocardiogramVoltageMeasurement * _Nullable voltageMeasurement, BOOL done, NSError * _Nullable error) {
+      double voltage = [[voltageMeasurement quantityForLead:HKElectrocardiogramLeadAppleWatchSimilarToLeadI] doubleValueForUnit:[HKUnit voltUnitWithMetricPrefix:HKMetricPrefixMilli]];
+      voltage = (round(voltage * 10000)) / 10000;
+      //     double time = [voltageMeasurement timeSinceSampleStart];
+      [voltages addObject:[NSNumber numberWithDouble: voltage]];
+      if (done == YES || error != nil) {
+        dispatch_group_leave(group);
+      }
+    }];
+    [[OMHSerializer healthStore] executeQuery: query];
+  });
+  
+  dispatch_group_enter(group);
+  dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
+    
+  return @{
+    @"values": @[date, time, rate, voltages],
+    @"effective_time_frame":[self populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
+  };
 }
 
 - (NSString*)schemaName {
-   return @"heart-rate-variablitity-sdnn";
+  return @"electrocardiogram";
 }
 - (NSString*)schemaVersion {
-   return @"1.0";
+  return @"1.0";
 }
 - (NSString*)schemaNamespace{
-   return @"omh";
+  return @"omh";
 }
 @end
-
